@@ -599,6 +599,71 @@ class MongoModels {
 
         collection.deleteMany.apply(collection, args);
     }
+
+
+    static lockupById() {
+
+        const self = this;
+        const args = new Array(arguments.length);
+        for (let i = 0; i < args.length; ++i) {
+            args[i] = arguments[i];
+        }
+
+        const query = args.shift(); //local Find Query
+        const foreignCollection = args.shift();
+        const joinField = args.shift(); //local field to join
+        const localField = args.shift(); //field to add or replace
+        const callback = this.resultFactory.bind(this, args.pop());
+        //local field filter
+        const requiredField = {}; // need to add default filter if filtering to ensure joinField is in document results
+        requiredField[joinField] = true;
+        const localFields = args.shift() || null;
+        localFields ? Hoek.applyToDefaults(requiredField,localFields) : {};
+
+        const localOptions = Hoek.applyToDefaults({ returnOriginal: false }, args.shift() || {});
+        const foreignFields = args.shift() || {};
+        const foreignOptions = Hoek.applyToDefaults({ returnOriginal: false }, args.shift() || {});
+
+        Async.auto({
+            localDocuments: function (done) {
+
+                self.find(query,localFields,localOptions, done);
+            },
+            objectIDs: ['localDocuments', function (results, done) {
+
+                //convert string ID to ObjectID
+                const objectID = [];
+                results.localDocuments.map((document) => {
+
+                    objectID.push(Mongodb.ObjectID(document[joinField]));
+                });
+                done(null, objectID);
+            }],
+            foreignDocuments: ['objectIDs', function (results, done) {
+
+                foreignCollection.find({ _id: { $in: results.objectIDs } }, foreignFields, foreignOptions, done);
+            }],
+            map: ['foreignDocuments', function (results, done) {
+
+                //create map to avoid n^2 loop
+                const map = {};
+                for (const document of results.foreignDocuments) {
+                    map[document._id.toString()] = document;
+                }
+                done(null, map);
+            }],
+            match: ['map', function (results, done) {
+
+                for (const document of results.localDocuments) {
+                    document[localField] = results.map[document[joinField]];
+                }
+                done();
+            }]
+        }, (err, results) => {
+
+            callback(err, results.localDocuments);
+        });
+    }
 }
 
 MongoModels._idClass = Mongodb.ObjectID;
