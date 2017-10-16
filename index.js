@@ -601,7 +601,7 @@ class MongoModels {
     }
 
 
-    static lockupById() {
+    static lookupById() {
 
         const self = this;
         const args = new Array(arguments.length);
@@ -662,6 +662,73 @@ class MongoModels {
         }, (err, results) => {
 
             callback(err, results.localDocuments);
+        });
+    }
+
+
+    static pagedLookupById(filter, sort, limit, page, foreignCollection, localField, foreignField, localFields, foreignFields, callback) {
+
+        const self = this;
+        const output = {
+            data: undefined,
+            pages: {
+                current: page,
+                prev: 0,
+                hasPrev: false,
+                next: 0,
+                hasNext: false,
+                total: 0
+            },
+            items: {
+                limit,
+                begin: ((page * limit) - limit) + 1,
+                end: page * limit,
+                total: 0
+            }
+        };
+
+        localFields = this.fieldsAdapter(localFields);
+        sort = this.sortAdapter(sort);
+        foreignFields = this.fieldsAdapter(foreignFields);
+
+        Async.auto({
+            count: function (done) {
+
+                self.count(filter, done);
+            },
+            find: function (done) {
+
+                const options = {
+                    limit,
+                    skip: (page - 1) * limit,
+                    sort
+                };
+
+                self.lockupById(filter, foreignCollection, foreignField, localField, localFields, options, foreignFields, done);
+            }
+        }, (err, results) => {
+
+            if (err) {
+                return callback(err);
+            }
+
+            output.data = results.find;
+            output.items.total = results.count;
+
+            // paging calculations
+            output.pages.total = Math.ceil(output.items.total / limit);
+            output.pages.next = output.pages.current + 1;
+            output.pages.hasNext = output.pages.next <= output.pages.total;
+            output.pages.prev = output.pages.current - 1;
+            output.pages.hasPrev = output.pages.prev !== 0;
+            if (output.items.begin > output.items.total) {
+                output.items.begin = output.items.total;
+            }
+            if (output.items.end > output.items.total) {
+                output.items.end = output.items.total;
+            }
+
+            callback(null, output);
         });
     }
 }
