@@ -25,7 +25,9 @@
   - [`findOneAndUpdate(filter, update, [options], callback)`](#findoneandupdatefilter-options-callback)
   - [`insertMany(docs, [options], callback)`](#insertmanydocs-options-callback)
   - [`insertOne(doc, [options], callback)`](#insertonedoc-options-callback)
+  - [`lookupById(filter, foreignCollection, foreignField, localField, [localFields], [localOptions], [foreignFields], [foreignOptions], callback)`](#lookupByIdfilter-foreignCollection-foreignField-localField-localFields-localOptions-foreignFields-foreignOptions-callback)
   - [`pagedFind(filter, fields, sort, limit, page, callback)`](#pagedfindfilter-fields-sort-limit-page-callback)
+  - [`pagedLookupById(filter, sort, limit, page, foreignCollection, foreignField, localField, [localFields], [localOptions], [foreignFields], [foreignOptions], callback)`](#pagedLookupByIdfilter-sort-limit-page-fields-sort-limit-page-callback)
   - [`replaceOne(filter, doc, [options], callback)`](#replaceonefilter-doc-options-callback)
   - [`sortAdapter(sorts)`](#sortadaptersorts)
   - [`updateMany(filter, update, [options], callback)`](#updatemanyfilter-update-options-callback)
@@ -372,6 +374,23 @@ Inserts a document and returns the new document where:
   - `err` - if the query failed, the error reason, otherwise `null`.
   - `results` - if the command succeeded, an array of documents as a class
     instances.
+    
+### `lookupById(filter, foreignCollection, foreignField, localField, [localFields], [localOptions], [foreignFields], [foreignOptions], callback)`
+
+Finds a document with a lookup by `_id` where:
+
+- `filter` - a filter object used to select the document from the local collection.
+- `foreignCollection` - the Mongo Models Object you wish to join apon.
+- `foreignField` - Field in the local collection to match with _id in the foreign collection
+- `localField` - Field in which to place append to the document. Could be an new or exisiting field.
+- `[localFields]` - indicates which fields should be included in the response from the local collection (default is all). It is string with space separated field names.
+- `[localOptions]` - an options object passed to MongoDB's native [`find`](https://docs.mongodb.com/manual/reference/method/db.collection.find/) method for the local collection. `localFields` must be passed in to use `localOptions`. Can be set to null.
+- `[foreignFields]` - indicates which fields should be included in the response from the foreign collection (default is all). It is string with space separated field names. `localFields`,`localOptions` must be passed in to use `foreignFields`. Can be set to null.
+- `[foreignOptions]` - an options object passed to MongoDB's native [`find`](https://docs.mongodb.com/manual/reference/method/db.collection.find/) method for the foreign collection. `localFields`,`localOptions`,`foreignFields` must be passed in to use `foreignOptions`. Can be set to null.
+- `callback` - the callback method using the signature `function (err,
+  results)` where:
+  - `err` - if the query failed, the error reason, otherwise `null`.
+  - `results` - if the query succeeded, an array of documents as class instances.
 
 ### `pagedFind(filter, fields, sort, limit, page, callback)`
 
@@ -385,6 +404,40 @@ Finds documents with paginated results where:
   order.
 - `limit` - a number indicating how many results should be returned.
 - `page` - a number indicating the current page.
+- `callback` - is the callback method using the signature `function (err,
+  results)` where:
+  - `err` - if the query failed, the error reason, otherwise null.
+  - `results` - the results object where:
+    - `data` - an array of documents from the query as class instances.
+    - `pages` - an object where:
+      - `current` - a number indicating the current page.
+      - `prev` - a number indicating the previous page.
+      - `hasPrev` - a boolean indicating if there is a previous page.
+      - `next` - a number indicating the next page.
+      - `hasNext` - a boolean indicating if there is a next page.
+      - `total` - a number indicating the total number of pages.
+    - `items` - an object where:
+      - `limit` - a number indicating the how many results should be returned.
+      - `begin` - a number indicating what item number the results begin with.
+      - `end` - a number indicating what item number the results end with.
+      - `total` - a number indicating the total number of matching results.
+      
+### `pagedLookupById(filter, sort, limit, page, foreignCollection, foreignField, localField, [localFields], [localOptions], [foreignFields], [foreignOptions], callback)`
+
+Finds a document with a lookup by `_id` where:
+
+- `filter` - a filter object used to select the document from the local collection.
+- `sort` - indicates how to sort the local documents. Can be a string with space.
+- `limit` - a number indicating how many results should be returned.
+- `page` - a number indicating the current page.
+- `foreignCollection` - the Mongo Models Object you wish to join apon.
+- `foreignField` - Field in the local collection to match with _id in the foreign collection
+- `localField` - Field in which to place append to the document. Could be an new or exisiting field.
+- `[localFields]` - indicates which fields should be included in the response from the local collection (default is all). It is string with space separated field names.
+- `[localOptions]` - an options object passed to MongoDB's native [`find`](https://docs.mongodb.com/manual/reference/method/db.collection.find/) method for the local collection. `localFields` must be passed in to use `localOptions`. Can be set to null.
+- `[foreignFields]` - indicates which fields should be included in the response from the foreign collection (default is all).
+It is string with space separated field names. `localFields`,`localOptions` must be passed in to use `foreignFields`. Can be set to null.
+- `[foreignOptions]` - an options object passed to MongoDB's native [`find`](https://docs.mongodb.com/manual/reference/method/db.collection.find/) method for the foreign collection. `localFields`,`localOptions`,`foreignFields` must be passed in to use `foreignOptions`. Can be set to null.
 - `callback` - is the callback method using the signature `function (err,
   results)` where:
   - `err` - if the query failed, the error reason, otherwise null.

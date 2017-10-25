@@ -1,5 +1,5 @@
 {
-  "name": "mongo-models",
+  "name": "hicsail-mongo-models",
   "version": "1.4.0",
   "description": "Map JavaScript classes to MongoDB collections",
   "main": "index.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:jedireza/mongo-models.git"
+    "url": "git@github.com:hicsail/hicsail-mongo-models.git"
   },
   "keywords": [
     "mongo",
@@ -20,12 +20,12 @@
   "engines": {
     "node": ">=4.0.0"
   },
-  "author": "Reza Akhavan <reza@akhavan.me>",
+  "author": "Boston University Software & Application Innovation Lab",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jedireza/mongo-models/issues"
+    "url": "https://github.com/hicsail/hicsail-mongo-models/issues"
   },
-  "homepage": "https://github.com/jedireza/mongo-models",
+  "homepage": "https://github.com/hicsail/hicsail-mongo-models#readme",
   "devDependencies": {
     "code": "4.x.x",
     "lab": "14.x.x",

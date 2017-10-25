@@ -704,7 +704,7 @@ class MongoModels {
                     sort
                 };
 
-                self.lockupById(filter, foreignCollection, foreignField, localField, localFields, options, foreignFields, done);
+                self.lookupById(filter, foreignCollection, foreignField, localField, localFields, options, foreignFields, done);
             }
         }, (err, results) => {
 
