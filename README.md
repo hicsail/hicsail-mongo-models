@@ -1,11 +1,11 @@
-# mongo-models
+# hicsail-mongo-models
 
-Map JavaScript classes to MongoDB collections.
+Map JavaScript classes to MongoDB collections. This project was forked from [mongo-models](https://github.com/jedireza/mongo-models)
 
-[![Build Status](https://img.shields.io/travis/jedireza/mongo-models.svg)](https://travis-ci.org/jedireza/mongo-models)
-[![Dependency Status](https://img.shields.io/david/jedireza/mongo-models.svg)](https://david-dm.org/jedireza/mongo-models)
-[![devDependency Status](https://img.shields.io/david/dev/jedireza/mongo-models.svg)](https://david-dm.org/jedireza/mongo-models#info=devDependencies)
-[![peerDependency Status](https://img.shields.io/david/peer/jedireza/mongo-models.svg)](https://david-dm.org/jedireza/mongo-models#info=peerDependencies)
+[![Build Status](https://img.shields.io/travis/hicsail/hicsail-mongo-models.svg)](https://travis-ci.org/hicsail/hicsail-mongo-models)
+[![Dependency Status](https://img.shields.io/david/hicsail/hicsail-mongo-models.svg)](https://david-dm.org/hicsail/hicsail-mongo-models)
+[![devDependency Status](https://img.shields.io/david/dev/hicsail/hicsail-mongo-models.svg)](https://david-dm.org/hicsail/hicsail-mongo-models?type=dev)
+[![peerDependency Status](https://img.shields.io/david/peer/hicsail/hicsail-mongo-models.svg)](https://david-dm.org/hicsail/hicsail-mongo-models?type=peer)
 
 [MongoDB](https://github.com/mongodb/node-mongodb-native)'s native driver for
 Node.js is pretty good. We just want a little sugar on top.
@@ -26,7 +26,7 @@ data schema.
 ## Install
 
 ```bash
-$ npm install mongo-models
+$ npm install hicsail-mongo-models
 ```
 
 
@@ -151,14 +151,10 @@ initiative to read relevant documentation and be pro-active with debugging.
 ## Want to contribute?
 
 Contributions are welcome. If you're changing something non-trivial, you may
-want to submit an issue before creating a large pull request.
+want to submit an issue before creating a large pull request. 
+Also Look at the original repo [mongo-models](https://github.com/jedireza/mongo-models) and also contribute back to the original repo as well!
 
 
 ## License
 
 MIT
-
-
-## Don't forget
-
-What you create with `mongo-models` is more important than `mongo-models`.
