@@ -1,6 +1,7 @@
 # hicsail-mongo-models
 
-Map JavaScript classes to MongoDB collections. This project was forked from [mongo-models](https://github.com/jedireza/mongo-models)
+Map JavaScript classes to MongoDB collections. 
+This project was forked from [mongo-models](https://github.com/jedireza/mongo-models). We also added additional function and features that is need for out team. Check them out in the [release notes](https://github.com/hicsail/hicsail-mongo-models/blob/master/release-notes.md).
 
 [![Build Status](https://img.shields.io/travis/hicsail/hicsail-mongo-models.svg)](https://travis-ci.org/hicsail/hicsail-mongo-models)
 [![Dependency Status](https://img.shields.io/david/hicsail/hicsail-mongo-models.svg)](https://david-dm.org/hicsail/hicsail-mongo-models)
